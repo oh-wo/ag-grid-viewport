@@ -1,11 +1,10 @@
 import Resource from "./Resource";
 import ViewportDatasource from "./viewportDatasource.js";
 const io = require("socket.io-client");
-const enterprise = require("ag-grid-enterprise");
+const agGrid = require('../node_modules/ag-grid-enterprise/dist/ag-grid-enterprise');
 
+agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs31_May_2017__MTQ5NjE4NTIwMDAwMA==f1526f49562664fe54c29d303330c88b");
 
-enterprise.LicenseManager.setLicenseKey("Biomatters_Site_5Devs_13_July_2017__MTQ5OTkwMDQwMDAwMA==cb6db07dbc59dc58f93583a20cb54200");
-const agGrid = require('ag-grid')
 
 const socket = io.connect('http://localhost:3000', {path: 'socket'});
 socket.on('news', function (data) {
