@@ -1,0 +1,23 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "2.8.3",
+    "express": "4.15.2",
+    "fs": "0.0.1-security",
+    "helmet": "3.5.0",
+    "http": "0.0.0",
+    "path": "0.12.7",
+    "socket.io": "1.7.3",
+    "url": "0.11.0",
+    "ws": "2.2.2"
+  }
+}
