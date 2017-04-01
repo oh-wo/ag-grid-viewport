@@ -1,4 +1,4 @@
-
+const socket = global.socket;
 
 class FilesService {
     constructor() {
@@ -22,6 +22,7 @@ class FilesService {
             return false;
         } else {
             this._files.splice(index, 1);
+            socket.send('fileDeleted', {id});
             return true;
         }
     }

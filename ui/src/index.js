@@ -5,11 +5,21 @@ const agGrid = require('../node_modules/ag-grid-enterprise/dist/ag-grid-enterpri
 
 agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs31_May_2017__MTQ5NjE4NTIwMDAwMA==f1526f49562664fe54c29d303330c88b");
 
+const ourFiles = [];
 
 const socket = io.connect();
 
 socket.on('connect', function () {
     console.log('socket connection')
+});
+
+socket.on('fileDeleted', data => {
+    console.log(data);
+    const index = ourFiles.findIndex(file => data.id === file.id);
+    if (index !== -1) {
+        ourFiles.splice(index, 1);
+        displayFiles();
+    }
 });
 
 socket.on('error', function (data) {
@@ -27,11 +37,17 @@ socket.on('news', function (data) {
 
 const filesEndpoint = 'http://localhost:3000/api/files';
 
+function displayFiles() {
+    const debugEl = document.querySelector('.debugger');
+    debugEl.innerText = ourFiles.map(file => `[${file.id} ${file.name}]`).toString();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
     fetch(filesEndpoint).then(response => response.json()).then(files => {
-        const debugEl = document.querySelector('.debugger');
-        debugEl.innerText = files.map(file => `[${file.id} ${file.name}]`).toString();
+        ourFiles.push.apply(ourFiles, files);
+        console.log(ourFiles)
+        displayFiles();
     });
 
     let i = 0;
