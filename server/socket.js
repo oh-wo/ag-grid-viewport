@@ -4,12 +4,13 @@ class Socket {
 
     constructor(server) {
         this.io = socket(server);
+        this.connections = [];
         console.log('new io')
 
 
         this.io.on('connection', socket => {
             // TODO Handle more than one connection (add to an array of socket connections etc).
-            this.socket = socket;
+            this.connections.push({socket});
             console.log('connection');
             socket.emit('news', {hello: 'world'});
             socket.on('viewportRange', data => {
@@ -23,7 +24,7 @@ class Socket {
     }
 
     send(type, data) {
-        this.socket.emit(type, data);
+        this.connections.forEach(connection => connection.socket.emit(type, data))
     }
 }
 

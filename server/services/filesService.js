@@ -1006,8 +1006,6 @@ class FilesService {
 
     _notifyRelevant(id, index) {
         socket.send('fileDeleted', {rowCount: this._files.length});
-        // if (socket.start <= index && index <= socket.end) {
-        // }
     }
 }
 
