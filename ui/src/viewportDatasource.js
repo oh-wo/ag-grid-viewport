@@ -1,9 +1,5 @@
-// client code (ie your code) will call this constructor, pass in whatever you need for the
-// viewport to do it's job
-export default class ViewportDatasource
-{
-    constructor(resource)
-    {
+export default class ViewportDatasource {
+    constructor(resource) {
         this.resource = resource;
         this.connectionId = this.resource.connect(this.eventListener.bind(this));
     }
@@ -13,26 +9,32 @@ export default class ViewportDatasource
      * @param firstRow
      * @param lastRow
      */
-    setViewportRange(firstRow, lastRow)
-    {
+    setViewportRange(firstRow, lastRow) {
         console.log('setViewportRange: ' + firstRow + ' to ' + lastRow);
         this.resource.setViewportRange(this.connectionId, firstRow, lastRow);
+
+        this.resource.fetch(firstRow, lastRow).then(response => {
+            const map = {};
+            response.data.forEach((row, index) => map[index] = row);
+            this.params.setRowData(map);
+        })
     }
 
     /**
      * Gets called by the grid, provides us with the callbacks we need
      * @param params
      */
-    init(params)
-    {
+    init(params) {
         this.params = params;
+        this.resource.fetch(0).then(response => {
+            params.setRowCount(response.metadata.total);
+        })
     }
 
     /**
      * Gets called by grid, when grid is destroyed or this datasource is swapped out for another one
      */
-    destroy()
-    {
+    destroy() {
         this.resource.disconnect(this.connectionId);
     }
 
@@ -40,8 +42,7 @@ export default class ViewportDatasource
      * manages events back from the server
      * @param event
      */
-    eventListener(event)
-    {
+    eventListener(event) {
         switch (event.eventType) {
             case 'rowCountChanged':
                 this.onRowCountChanged(event);
@@ -59,8 +60,7 @@ export default class ViewportDatasource
      * Process rowData event
      * @param event
      */
-    onRowData(event)
-    {
+    onRowData(event) {
         const rowDataFromServer = event.rowDataMap;
         this.params.setRowData(rowDataFromServer);
     }
@@ -69,8 +69,7 @@ export default class ViewportDatasource
      * Process dataUpdated event
      * @param event
      */
-    onDataUpdated(event)
-    {
+    onDataUpdated(event) {
         event.changes.forEach(change => {
             const rowNode = this.params.getRow(change.rowIndex);
             // if the rowNode is missing, it means the grid is not displaying that row.
@@ -89,8 +88,7 @@ export default class ViewportDatasource
      * Process rowCount event
      * @param event
      */
-    onRowCountChanged(event)
-    {
+    onRowCountChanged(event) {
         const rowCountFromServer = event.rowCount;
         // this will get the grid to make set the height of the row container, so we can scroll vertically properly
         this.params.setRowCount(rowCountFromServer);

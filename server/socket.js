@@ -12,8 +12,9 @@ class Socket {
             this.socket = socket;
             console.log('connection');
             socket.emit('news', {hello: 'world'});
-            socket.on('my other event', data => {
-                console.log(data);
+            socket.on('viewportRange', data => {
+                this.start = data.firstRow;
+                this.stop = data.lastRow;
             });
         });
 
@@ -22,7 +23,7 @@ class Socket {
     }
 
     send(type, data) {
-        this.socket.emit(type, data)
+        this.socket.emit(type, data);
     }
 }
 

@@ -3,7 +3,12 @@ const filesApi = express();
 const filesService = require('../services/filesService');
 
 filesApi.get('/', (req, res) => {
-    const files = filesService.get();
+    // Parse parameters.
+    const start = parseInt(req.query.start);
+    const stop = parseInt(req.query.stop);
+    // Get the data.
+    const files = filesService.get(start, stop);
+    // Send the response.
     res.send(files);
 });
 

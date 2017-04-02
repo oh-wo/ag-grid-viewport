@@ -1,64 +1,16 @@
 import Resource from "./Resource";
 import ViewportDatasource from "./viewportDatasource.js";
-const io = require("socket.io-client");
+
 const agGrid = require('../node_modules/ag-grid-enterprise/dist/ag-grid-enterprise');
 
 agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs31_May_2017__MTQ5NjE4NTIwMDAwMA==f1526f49562664fe54c29d303330c88b");
 
-const ourFiles = [];
-
-const socket = io.connect();
-
-socket.on('connect', function () {
-    console.log('socket connection')
-});
-
-socket.on('fileDeleted', data => {
-    console.log(data);
-    const index = ourFiles.findIndex(file => data.id === file.id);
-    if (index !== -1) {
-        ourFiles.splice(index, 1);
-        displayFiles();
-    }
-});
-
-socket.on('error', function (data) {
-    console.log(data || 'error');
-});
-
-socket.on('connect_failed', function (data) {
-    console.log(data || 'connect_failed');
-});
-
-socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', {my: 'data'});
-});
-
-const filesEndpoint = 'http://localhost:3000/api/files';
-
-function displayFiles() {
-    const debugEl = document.querySelector('.debugger');
-    debugEl.innerText = ourFiles.map(file => `[${file.id} ${file.name}]`).toString();
-}
+const resource = new Resource();
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    fetch(filesEndpoint).then(response => response.json()).then(files => {
-        ourFiles.push.apply(ourFiles, files);
-        console.log(ourFiles)
-        displayFiles();
-    });
-
     let i = 0;
     const deleteEl = document.querySelector('#deleteFile');
-    deleteEl.addEventListener('click', () => deleteFile(i++));
-
-    function deleteFile(id) {
-        fetch(`${filesEndpoint}/${id}`, {
-            method: 'DELETE',
-        })
-    }
+    deleteEl.addEventListener('click', () => resource.deleteFile(i++));
 });
 
 // specify the columns
@@ -94,8 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // create the grid passing in the div to use together with the columns & data we want to use
     new agGrid.Grid(eGridDiv, gridOptions);
-
-    const resource = new Resource();
 
     const viewportDatasource = new ViewportDatasource(resource);
     gridOptions.api.setViewportDatasource(viewportDatasource);
