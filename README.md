@@ -10,7 +10,9 @@ _Only tested on MacOS._
 # Installation
 * Install the server and ui by cd into `/server` and `/ui` respectively and then running `npm install`
 * Setup Heroku so you can deploy:
-** 
+** Get access to the heroku project from [owen](mailto:obodley@gmail.com?subject=Request for access to ag-grid-viewport&Body=Please give me access to the Ag-Grid-Viewport project hosted on Heroku.)
+** Login: `heroku login`
+** Add the git remote: `git remote add https://git.heroku.com/table-improvements.git`
 
 # Local development
 * Start the server and ui by running `npm start` in both `/server` and `/ui`
@@ -19,10 +21,7 @@ _Only tested on MacOS._
 # Production
 
 ## Deployment
-* Get access to the heroku project from [owen](mailto:obodley@gmail.com?subject=Request for access to ag-grid-viewport&Body=Please give me access to the Ag-Grid-Viewport project hosted on Heroku.)
-* Login to Heroku using your credentials: `heroku login`
-* Add the Heroku remote if you haven't already: `git remote add https://git.heroku.com/table-improvements.git`
-* Deploy: `git push heroku master`
+* `git push heroku master`
 
 ## Logs
 * Get heroku logs: `heroku logs --app table-improvements --tail`
