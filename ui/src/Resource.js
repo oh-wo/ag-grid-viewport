@@ -2,7 +2,7 @@ const io = require("socket.io-client");
 
 export default class Resource {
     constructor() {
-        this.endpoint = 'http://localhost:3000/api/files';
+        this.endpoint = '/api/files';
     }
 
     fetch(start, stop) {
