@@ -3,26 +3,26 @@ Investigation to learn about how the Ag-Grid viewport model works.
 [View it online here](https://table-improvements.herokuapp.com/)
 
 # Requirements
-* Node
-* Only tested on MacOS
+_Only tested on MacOS._
+* [Node](https://nodejs.org/en/)
+* [Heroku Toolbelt](https://devcenter.heroku.com/articles/heroku-cli)
 
 # Installation
 * Install the server and ui by cd into `/server` and `/ui` respectively and then running `npm install`
 * Setup Heroku so you can deploy:
 ** 
 
-# Running 
-Star the server and ui by running `npm start` in both `/server` and `/ui`
+# Local development
+* Start the server and ui by running `npm start` in both `/server` and `/ui`
+* Do your work in feature branches, create a PR and then merge to master after review.
 
-# Deployment
-(TODO)
+# Production
 
-## Production
-
+## Deployment
+* Get access to the heroku project from [owen](mailto:obodley@gmail.com?subject=Request for access to ag-grid-viewport&Body=Please give me access to the Ag-Grid-Viewport project hosted on Heroku.)
+* Login to Heroku using your credentials: `heroku login`
+* Add the Heroku remote if you haven't already: `git remote add https://git.heroku.com/table-improvements.git`
+* Deploy: `git push heroku master`
 
 ## Logs
 * Get heroku logs: `heroku logs --app table-improvements --tail`
-
-# Git strategy
-* Do your work in feature branches, create a PR and then merge to master after review.
-
