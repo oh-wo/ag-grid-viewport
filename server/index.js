@@ -21,10 +21,9 @@ app.use(helmet({
 
 app.use(cors());
 
-
 use('/api/files');
 
-app.use('/', express.static('../dist'));
+app.use('/', express.static(path.join('../dist/index.html')));
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
