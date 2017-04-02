@@ -6,7 +6,38 @@ agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Producti
 
 const resource = new Resource();
 
+let selectAll = true;
+
 const columnDefs = [
+    {
+        headerName: "Select",
+        field: "selected",
+        cellRenderer: params => {
+            const isChecked = (params.data && params.data.checked);
+            const checked = (selectAll || isChecked ) ? 'checked' : '';
+            const disabled = params.data ? '' : 'disabled';
+            return `<input type="checkbox" ${checked} ${disabled}/>`
+        },
+        headerComponent: class SelectAllComponent {
+            init(agParams) {
+                // TODO Create wrapper element with input and span as children.
+                this.gui = document.createElement('input');
+                this.gui.setAttribute('type', 'checkbox');
+                if (selectAll) {
+                    this.gui.setAttribute('checked', 'checked');
+                }
+                this.gui.addEventListener('click', () => {
+                    console.log('toggle select all');
+                    selectAll = !selectAll;
+                    gridOptions.api.refreshView();
+                })
+            }
+
+            getGui() {
+                return this.gui;
+            }
+        }
+    },
     {
         headerName: "Delete",
         field: "id",
@@ -15,7 +46,7 @@ const columnDefs = [
             window.deleteFile = id => resource.deleteFile(id);
 
             const id = params.data && params.data.id;
-            const disabled = id ? '' : 'disabled';
+            const disabled = (typeof id !== 'undefined') ? '' : 'disabled';
 
             return `<button ${disabled} onclick="window.deleteFile(${id})"></button>`;
         }
