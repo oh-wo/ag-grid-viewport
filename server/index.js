@@ -24,15 +24,19 @@ app.use(cors());
 
 use('/api/files');
 
-app.use('/',express.static('./dist'))
+app.use('/', express.static('../dist'));
 
-server.listen(process.env.PORT || 3000);
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+    const host = server.address().address;
+    console.log('Web server listening on http://%s:%s', host, port);
+});
 
 /**
  * Each endpoint must have a file whose name exactly matches its path.
  *
  * @param path {String} endpoint starting with a slash.
  */
-function use(path){
+function use(path) {
     app.use(path, require(`.${path}`));
 }
