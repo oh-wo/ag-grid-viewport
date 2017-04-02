@@ -13,11 +13,7 @@ export default class ViewportDatasource {
         console.log('setViewportRange: ' + firstRow + ' to ' + lastRow);
         this.resource.setViewportRange(this.connectionId, firstRow, lastRow);
 
-        this.resource.fetch(firstRow, lastRow).then(response => {
-            const map = {};
-            response.data.forEach((row, index) => map[index] = row);
-            this.params.setRowData(map);
-        })
+        this.resource.fetch(firstRow, lastRow).then(serverResponse => this.onRowData({serverResponse}))
     }
 
     /**
@@ -61,8 +57,10 @@ export default class ViewportDatasource {
      * @param event
      */
     onRowData(event) {
-        const rowDataFromServer = event.rowDataMap;
-        this.params.setRowData(rowDataFromServer);
+        const response = event.serverResponse;
+        const map = {};
+        response.data.forEach((row, index) => map[index + response.metadata.start] = row);
+        this.params.setRowData(map);
     }
 
     /**

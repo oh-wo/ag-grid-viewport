@@ -28,14 +28,11 @@ export default class Resource {
         });
 
         this.socket.on('fileDeleted', data => {
-            this.fetch(this.lastStart, this.lastStop).then(response => {
-                const rowDataMap = {};
-                response.data.forEach((row,index) => rowDataMap[index] = row);
-                const event = {
-                    eventType: 'rowData', rowDataMap
-                };
-                console.log('rowData', rowDataMap)
-                listener(event)
+            this.fetch(this.lastStart, this.lastStop).then(serverResponse => {
+                listener({
+                    eventType: 'rowData',
+                    serverResponse
+                })
             })
         });
 

@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
     context: __dirname + '/src',
@@ -6,7 +7,7 @@ module.exports = {
         index: './index.js'
     },
     output: {
-        path: __dirname +'/dist',
+        path: path.join(__dirname, '../dist'),
         filename: '[name].js'
     },
     module: {

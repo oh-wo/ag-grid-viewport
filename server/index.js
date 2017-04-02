@@ -24,7 +24,7 @@ app.use(cors());
 
 use('/api/files');
 
-app.use('/',express.static('../ui/dist'))
+app.use('/',express.static('./dist'))
 
 server.listen(process.env.PORT || 3000);
 
