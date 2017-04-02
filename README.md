@@ -6,7 +6,9 @@ Investigation to learn about how the Ag-Grid viewport model works.
 * Only tested on MacOS
 
 # Installation
-Install the server and ui by cd into `/server` and `/ui` respectively and then running `npm install`
+* Install the server and ui by cd into `/server` and `/ui` respectively and then running `npm install`
+* Setup Heroku so you can deploy:
+** 
 
 # Running 
 Star the server and ui by running `npm start` in both `/server` and `/ui`
