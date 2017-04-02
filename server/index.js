@@ -3,7 +3,7 @@ const http = require('http');
 const url = require('url');
 const cors = require('cors');
 const path = require('path');
-const Socket = require('./Socket');
+const Socket = require('./socket');
 
 const app = express();
 const server = http.Server(app);

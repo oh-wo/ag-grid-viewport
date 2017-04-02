@@ -14,6 +14,12 @@ Star the server and ui by running `npm start` in both `/server` and `/ui`
 # Deployment
 (TODO)
 
+## Production
+
+
+## Logs
+* Get heroku logs: `heroku logs --app table-improvements --tail`
+
 # Git strategy
 * Do your work in feature branches, create a PR and then merge to master after review.
 

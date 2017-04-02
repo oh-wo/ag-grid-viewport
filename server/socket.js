@@ -16,7 +16,7 @@ class Socket {
             socket.on('viewportRange', data => {
                 this.start = data.firstRow;
                 this.stop = data.lastRow;
-            });
+              });
         });
 
         global.socket = this;
