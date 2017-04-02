@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const app = express();
 const server = http.Server(app);
 const io = new Socket(server);
+const compression = require('compression')
 
 // Allow loading scripts from unsafe locations.
 // TODO Fix security hole if we start to care about that.
@@ -20,6 +21,9 @@ app.use(helmet({
 
 // Allow cross origin requests.
 app.use(cors());
+
+// Gzip files.
+app.use(compression());
 
 // Define the api.
 use('/api/files');
