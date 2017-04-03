@@ -7,16 +7,40 @@ agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Producti
 const resource = new Resource();
 
 let selectAll = true;
+let deselected = {};
 
 const columnDefs = [
     {
         headerName: "Select",
         field: "selected",
         cellRenderer: params => {
-            const isChecked = (params.data && params.data.checked);
-            const checked = (selectAll || isChecked ) ? 'checked' : '';
-            const disabled = params.data ? '' : 'disabled';
-            return `<input type="checkbox" ${checked} ${disabled}/>`
+            const checkbox = document.createElement('input');
+            checkbox.setAttribute('type', 'checkbox');
+            // -- All selection processing happens here --.
+            if (params.data) {
+                const select = selectAll ? !deselected[params.data.id] : false;
+                params.node.setSelected(select);
+            } else {
+                checkbox.setAttribute('disabled', 'disabled');
+            }
+
+            if (params.node.selected) {
+                checkbox.setAttribute('checked', 'checked');
+            }
+
+            checkbox.addEventListener('click', () => {
+                params.node.setSelected(checkbox.checked);
+                if (selectAll) {
+                    if (!checkbox.checked) {
+                        deselected[params.data.id] = true;
+                    } else {
+                        delete deselected[params.data.id];
+                    }
+                }
+                console.log('deselected', deselected)
+            });
+
+            return checkbox;
         },
         headerComponent: class SelectAllComponent {
             init(agParams) {
@@ -26,9 +50,12 @@ const columnDefs = [
                 if (selectAll) {
                     this.gui.setAttribute('checked', 'checked');
                 }
-                this.gui.addEventListener('click', () => {
-                    console.log('toggle select all');
+                this.gui.addEventListener('change', () => {
                     selectAll = !selectAll;
+                    if (!selectAll) {
+                        gridOptions.api.deselectAll();
+                        deselected = {};
+                    }
                     gridOptions.api.refreshView();
                 })
             }
@@ -70,6 +97,10 @@ const gridOptions = {
     // implement this so that we can do selection
     getRowNodeId: row => {
         return row.id;
+    },
+    onSelectionChanged: () => {
+        const selectedRows = gridOptions.api.getSelectedRows();
+        // console.log('selectedRows:', selectedRows)
     }
 };
 
