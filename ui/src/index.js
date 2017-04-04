@@ -25,8 +25,12 @@ class SelectionHeaderComponent {
             console.log('toggle select all');
             selectAll = !selectAll;
             if (!selectAll) {
-                gridOptions.api.deselectAll();
                 deselected = {};
+                // Deselect all nodes (ideally). This will leave some rows selected however if they're not visible.
+                gridOptions.api.deselectAll();
+                // Deselect any rows that aren't in the viewport right now.
+                const selectedRows = gridOptions.api.getSelectedNodes();
+                selectedRows.forEach(node => node.setSelected(false));
             }
             gridOptions.api.refreshView();
         })
@@ -91,8 +95,12 @@ const columnDefs = [
                 if (selectedCount === params.api.rowModel.lastRow) {
                     console.log('all rows are selected');
                     selectAll = true;
-                    // Render changes.
+                    // Update the header checkbox.
                     gui.checked = selectAll;
+                    // Deselect any rows that aren't in the viewport right now.
+                    // (The cell renderer handles the ones in the viewport).
+                    gridOptions.api.deselectAll();
+                    // Render changes.
                     gridOptions.api.refreshGroupRows();
                 }
             });
@@ -143,7 +151,6 @@ const gridOptions = {
     },
     onSelectionChanged: () => {
         const selectedRows = gridOptions.api.getSelectedRows();
-
         console.log('deselected', deselected)
     }
 };
