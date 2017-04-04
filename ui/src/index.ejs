@@ -9,15 +9,23 @@
             margin: 0;
             overflow: hidden;
         }
+        .toolbar {
+            border: solid 1px;
+            box-sizing: border-box;
+            padding: 10px;
+            background-color: #e2e2e2;
+        }
+        #myGrid{
+            height: calc(100% - 40px);
+        }
     </style>
 </head>
 
 <body>
 <div class="toolbar">
-    <!-- TODO Consider if not needed -->
+    <button id="createFile">Add</button>
 </div>
-<div class="debugger"></div>
-<div id="myGrid" style="height: 100%;" class="ag-material">Loading</div>
+<div id="myGrid" class="ag-material">Loading</div>
 </body>
 
 </html>

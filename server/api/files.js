@@ -13,6 +13,13 @@ filesApi.get('/', (req, res) => {
 });
 
 
+filesApi.post('/', (req, res) => {
+    const newFile = filesService.create();
+    // Send the response.
+    res.send(newFile);
+});
+
+
 filesApi.delete('/:id', (req, res) => {
     const fileId = req.params.id;
     const success = filesService.delete(fileId);

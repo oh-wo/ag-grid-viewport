@@ -27,6 +27,15 @@ export default class Resource {
             console.log('socket connection')
         });
 
+        this.socket.on('fileAdded', data => {
+            this.fetch(this.lastStart, this.lastStop).then(serverResponse => {
+                listener({
+                    eventType: 'rowData',
+                    serverResponse
+                })
+            })
+        });
+
         this.socket.on('fileDeleted', data => {
             this.fetch(this.lastStart, this.lastStop).then(serverResponse => {
                 listener({
@@ -47,6 +56,10 @@ export default class Resource {
 
     disconnect() {
 
+    }
+
+    createFile() {
+        return fetch(this.endpoint, {method: 'POST'});
     }
 
     deleteFile(id) {

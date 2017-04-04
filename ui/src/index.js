@@ -6,6 +6,7 @@ agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Producti
 
 const resource = new Resource();
 
+
 let selectAll = false;
 let deselected = {};
 const gui = document.createElement('input');
@@ -167,4 +168,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const viewportDatasource = new ViewportDatasource(resource);
     gridOptions.api.setViewportDatasource(viewportDatasource);
+
+    document.querySelector('#createFile').addEventListener('click', () => {
+        resource.createFile()
+            .then(response => response.json())
+            .then(file => console.log('Created file', file))
+            .catch(error => console.log('Failed to create file', error))
+
+        console.log('Creating file')
+    })
 });
