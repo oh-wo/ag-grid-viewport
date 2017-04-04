@@ -119,11 +119,11 @@ const columnDefs = [
             const id = params.data && params.data.id;
             const disabled = (typeof id !== 'undefined') ? '' : 'disabled';
 
-            return `<button ${disabled} onclick="window.deleteFile(${id})"></button>`;
+            return `<button ${disabled} onclick="window.deleteFile('${id}')"></button>`;
         }
     },
     {"headerName": "Name", "field": "name"},
-    {"headerName": "File type", "field": "documentType"},
+    {"headerName": "File type", "field": "fileType"},
     {"headerName": "Description", "field": "description"},
     {"headerName": "Length", "field": "sequenceLength"},
     {"headerName": "No. Sequences", "field": "sequenceCount"},

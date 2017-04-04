@@ -14,7 +14,7 @@ filesApi.get('/', (req, res) => {
 
 
 filesApi.delete('/:id', (req, res) => {
-    const fileId = parseInt(req.params.id);
+    const fileId = req.params.id;
     const success = filesService.delete(fileId);
     console.log('delete file with id', fileId, ' was ', success ? 'successful' : 'unsuccessful');
     return res.status(success ? 200 : 404).send();
