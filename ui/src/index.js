@@ -6,8 +6,36 @@ agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Producti
 
 const resource = new Resource();
 
-let selectAll = true;
+let selectAll = false;
 let deselected = {};
+const gui = document.createElement('input');
+class SelectionHeaderComponent {
+    init(agParams) {
+        // TODO Create wrapper element with input and span as children.
+        this.gui = gui;
+        this.gui.setAttribute('type', 'checkbox');
+
+        if (selectAll) {
+            this.gui.setAttribute('checked', 'checked');
+        } else {
+            this.gui.removeAttribute('checked');
+        }
+
+        this.gui.addEventListener('change', () => {
+            console.log('toggle select all');
+            selectAll = !selectAll;
+            if (!selectAll) {
+                gridOptions.api.deselectAll();
+                deselected = {};
+            }
+            gridOptions.api.refreshView();
+        })
+    }
+
+    getGui() {
+        return this.gui;
+    }
+}
 
 const columnDefs = [
     {
@@ -16,20 +44,28 @@ const columnDefs = [
         cellRenderer: params => {
             const checkbox = document.createElement('input');
             checkbox.setAttribute('type', 'checkbox');
-            // -- All selection processing happens here --.
-            if (params.data) {
-                const select = selectAll ? !deselected[params.data.id] : false;
-                params.node.setSelected(select);
+
+            const loading = !!params.data;
+            if (loading) {
+                // Show rows as selected if select all is checked and the row hasn't been deselected.
+                if (selectAll) {
+                    const select = !deselected[params.data.id];
+                    console.log(`rendering as ${select} to mock select all`)
+                    params.node.setSelected(select);
+                }
             } else {
                 checkbox.setAttribute('disabled', 'disabled');
             }
 
-            if (params.node.selected) {
+            // Render checkbox as selected if needed.
+            if (params.node.isSelected()) {
+                console.log('setting checked because is selected');
                 checkbox.setAttribute('checked', 'checked');
             }
 
-            checkbox.addEventListener('click', () => {
-                params.node.setSelected(checkbox.checked);
+            checkbox.addEventListener('click', e => {
+                console.log('checkbox change', e.target.checked)
+                params.node.setSelected(e.target.checked);
                 if (selectAll) {
                     if (!checkbox.checked) {
                         deselected[params.data.id] = true;
@@ -37,33 +73,33 @@ const columnDefs = [
                         delete deselected[params.data.id];
                     }
                 }
-                console.log('deselected', deselected)
+
+                const selectedRows = gridOptions.api.getSelectedRows();
+
+                // When all rows are deselected.
+                if (Object.keys(deselected).length === params.api.rowModel.lastRow) {
+                    console.log('all rows are deselected');
+                    selectAll = false;
+                    // Render changes.
+                    gui.checked = selectAll;
+                    gridOptions.api.refreshGroupRows();
+                    // Reset the map.
+                    deselected = {};
+                }
+                const selectedCount = selectedRows.length;
+                // All rows are now selected.
+                if (selectedCount === params.api.rowModel.lastRow) {
+                    console.log('all rows are selected');
+                    selectAll = true;
+                    // Render changes.
+                    gui.checked = selectAll;
+                    gridOptions.api.refreshGroupRows();
+                }
             });
 
             return checkbox;
         },
-        headerComponent: class SelectAllComponent {
-            init(agParams) {
-                // TODO Create wrapper element with input and span as children.
-                this.gui = document.createElement('input');
-                this.gui.setAttribute('type', 'checkbox');
-                if (selectAll) {
-                    this.gui.setAttribute('checked', 'checked');
-                }
-                this.gui.addEventListener('change', () => {
-                    selectAll = !selectAll;
-                    if (!selectAll) {
-                        gridOptions.api.deselectAll();
-                        deselected = {};
-                    }
-                    gridOptions.api.refreshView();
-                })
-            }
-
-            getGui() {
-                return this.gui;
-            }
-        }
+        headerComponent: SelectionHeaderComponent
     },
     {
         headerName: "Delete",
@@ -94,13 +130,21 @@ const gridOptions = {
     rowHeight: 40,
     rowSelection: 'multiple',
     rowModelType: 'viewport',
+    // Prevent row clicks from interfering with checkbox selection.
+    suppressRowClickSelection: true,
     // implement this so that we can do selection
     getRowNodeId: row => {
         return row.id;
     },
+    onRowClicked: e => {
+        // e.event.preventDefault()
+        e.event.stopImmediatePropagation();
+        console.log('click')
+    },
     onSelectionChanged: () => {
         const selectedRows = gridOptions.api.getSelectedRows();
-        // console.log('selectedRows:', selectedRows)
+
+        console.log('deselected', deselected)
     }
 };
 
