@@ -21,7 +21,7 @@ class FilesService {
 
     create() {
         const randomInt = () => Math.round(Math.random() * 50);
-        const id =  uuidV4();
+        const id = uuidV4();
         const newFile = {
             id,
             fileType: "Nucleotide Sequence",
@@ -32,7 +32,7 @@ class FilesService {
             uploadedAt: Date.now()
         };
         this._files.unshift(newFile);
-        this._notifyRelevant('fileAdded');
+        this._notifyRelevant('fileAdded', id);
         return newFile;
     }
 
@@ -43,13 +43,13 @@ class FilesService {
             return false;
         } else {
             this._files.splice(index, 1);
-            this._notifyRelevant('fileDeleted', id, index);
+            this._notifyRelevant('fileDeleted', id);
             return true;
         }
     }
 
-    _notifyRelevant(type, id, index) {
-        socket.send(type, {rowCount: this._files.length});
+    _notifyRelevant(type, id) {
+        socket.send(type, {rowCount: this._files.length, id});
     }
 }
 

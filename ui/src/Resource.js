@@ -1,7 +1,9 @@
 const io = require("socket.io-client");
+import EventListener from './EventListener'
 
-export default class Resource {
+export default class Resource extends EventListener {
     constructor() {
+        super();
         this.endpoint = '/api/files';
     }
 
@@ -28,6 +30,7 @@ export default class Resource {
         });
 
         this.socket.on('fileAdded', data => {
+            this._trigger('fileAdded', data);
             this.fetch(this.lastStart, this.lastStop).then(serverResponse => {
                 listener({
                     eventType: 'rowData',

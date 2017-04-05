@@ -6,6 +6,13 @@ agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Producti
 
 const resource = new Resource();
 
+resource.on('fileAdded', data => {
+    if (selectAll) {
+        // New rows created since the selectAll was changed should not be selected.
+        deselected[data.id] = true;
+    }
+});
+
 
 let selectAll = false;
 let deselected = {};
