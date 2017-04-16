@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "cd ./ui && npm install",
-    "start": "node index.js",
+    "postinstall": "cd ./ui && yarn install",
+    "start": "node ./serer/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

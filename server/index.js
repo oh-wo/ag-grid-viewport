@@ -53,8 +53,8 @@ server.listen(port, () => {
 /**
  * Each endpoint must have a file whose name exactly matches its path.
  *
- * @param path {String} endpoint starting with a slash.
+ * @param dir {String} endpoint starting with a slash.
  */
-function use(path) {
-    app.use(path, require(`.${path}`));
+function use(dir) {
+    app.use(dir, require(`.${dir}`));
 }
